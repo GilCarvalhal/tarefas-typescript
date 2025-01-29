@@ -2,7 +2,23 @@ let listElement = document.querySelector("#app ul") as HTMLUListElement;
 let inputElement = document.querySelector("#app input") as HTMLInputElement;
 let buttonElement = document.querySelector("#app button") as HTMLButtonElement;
 
-let tarefas: string[] = [];
+let listaSalva: string | null = localStorage.getItem("@listagem_tarefas");
+console.log(listaSalva);
+let tarefas: string[] = (listaSalva !== null && JSON.parse(listaSalva)) || [];
+
+function listarTarefas() {
+  listElement.innerHTML = "";
+
+  tarefas.map((item) => {
+    let todoElement = document.createElement("li");
+    let tarefaText = document.createTextNode(item);
+
+    todoElement.appendChild(tarefaText);
+    listElement.appendChild(todoElement);
+  });
+}
+
+listarTarefas();
 
 function adicionarTarefa(): boolean | void {
   if (inputElement.value === "") {
@@ -13,6 +29,7 @@ function adicionarTarefa(): boolean | void {
 
     inputElement.value = "";
 
+    listarTarefas();
     salvarDados();
   }
 }
